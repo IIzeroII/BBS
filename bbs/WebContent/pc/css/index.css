@@ -1,0 +1,219 @@
+/*网页全局*/
+.container
+{
+	width: 100%;
+	height: 800px;
+}
+a
+{
+	text-decoration: none;
+}
+
+/*导航栏*/
+.header
+{
+	background: #BA4C31;
+	height: 10%;
+	position: relative;
+}
+.header span 
+{
+	color: #FFFAFF;
+}
+#header_span1
+{
+	font-weight: bold;
+	position: absolute;
+	top: 16%;
+	left: 2%;
+	
+}
+#header_span2
+{
+	position: absolute;
+	top: 16%;
+	right: 2%;
+}
+#header_span2 a
+{
+	color: #FFFAFF;
+}
+#header_span2 a:hover
+{
+	color: #000000;
+}
+.header ul
+{
+	list-style: none;
+	position: absolute;
+	bottom: -20%;
+	left: -1%;
+}
+.header ul li
+{
+	display: inline;
+}
+.header ul li
+{
+	float: left;
+	background: #FFF2C6;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	padding: 5px 5px;
+	margin-right: 2px;
+}
+.header ul li a
+{
+	color: #000000;
+}
+/* 主体 */
+.main
+{
+	height: 85%;
+	background: #F9EBAE;
+	padding: 2%;
+}
+#main_title a
+{
+	color: #000000;
+	font-size: 14px;
+	 
+	/* width:4%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	*/
+    /*Opera浏览器 -o-text-overflow: ellipsis;*/
+    
+    white-space:nowrap;
+    display:inline-block;
+    text-decoration: underline;
+}
+
+.tab_header 
+{
+	height:5%;
+	background: #BA4C31;
+	position: relative;
+	margin-top: 2%;
+}
+.tab_content
+{
+	background: #FBFDFC; 
+}
+
+#user_form
+{
+	height: 200px;
+	text-align: center;
+	padding-top: 2%;
+}
+#user_form span
+{
+	color: #BA4C31;
+}
+#user_form div
+{
+	margin-top: 1%;
+}
+
+.tab_header>span
+{
+	position: absolute;
+	left: 1%;
+	top: 14%;
+}
+.tab_header form
+{
+	position: absolute;
+	right: 1%;
+	top: 14%;
+}
+.tab_header form span
+{
+	font-size: 13px;
+	color: #FFFAFF;
+}
+
+table
+{
+	width: 100%;
+	text-align: center;
+}
+table th
+{
+	background: #FEF8E8; 
+}
+
+.note_head,.note_content,.note_footer
+{
+	padding: 1%;
+}
+.note_footer
+{
+	background: #EEEEEE;
+	position: relative;
+}
+
+.note_head input
+{
+	width: 99.6%;
+}
+#note_head_span1
+{
+	float: left;
+	font-weight: bold;
+}
+#note_head_span2
+{
+	float: right;
+}
+
+
+.note_content textarea
+{
+	width: 99.6%;
+	height: 260px;
+}
+#note_content_span1
+{
+	float: left;
+	font-weight: bold;
+}
+#note_content_span2
+{
+	float: right;
+}
+
+#note_footer_input1
+{
+	position: absolute;
+	top: 12%;
+	right: 10%;
+}
+#note_footer_input2
+{
+	position: absolute;
+	top: 12%;
+	right: 4%;
+}
+
+/* 尾部 */
+.footer
+{
+	background: #BA4C31;
+	height: 5%;
+	position: relative;
+}
+#footer_span1
+{
+	position: absolute;
+	top: 22%;
+	left: 1%;
+}
+#footer_span2
+{
+	position: absolute;
+	top: 22%;
+	right: 1%;
+}
+

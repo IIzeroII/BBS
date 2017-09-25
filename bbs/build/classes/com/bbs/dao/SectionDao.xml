@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.dao.SectionDao">
+	<!-- id：标识；parameterType：接收的参数类型，resultType：返回值类型 -->
+	
+	<!-- 根据ID查询单条记录 -->
+	<select id="getSection" parameterType="int" resultMap="SectionResultMap">
+		SELECT * FROM section WHERE sectionId = #{id} AND status != 0
+	</select>
+	
+	<!-- 查询所有记录 -->
+	<select id="findAll" resultMap="SectionResultMap">
+		SELECT * FROM section WHERE status != 0 
+	</select>
+	
+	<!-- 根据关键字搜索 -->
+	<select id="search" parameterType="string" resultMap="SectionResultMap">
+		SELECT * FROM section WHERE status != 0 AND (sectionName LIKE CONCAT('%',#{key},'%') || sectionRemarks LIKE CONCAT('%',#{key},'%') || userId IN(SELECT userId FROM users WHERE userName LIKE CONCAT('%',#{key},'%')))
+	</select>
+	
+	<!-- 插入一条记录,keyProperty是Java对象的属性名,执行完插入语句后，自动将自增主键赋给对象的指定属性 -->
+	<insert id="saveSection" parameterType="Section" useGeneratedKeys="true" keyProperty="sectionId">
+		INSERT INTO section(sectionName,sectionRemarks,topicCount,userId,status) VALUES(#{sectionName},#{sectionRemarks},#{topicCount},#{user.userId},#{status})
+	</insert>
+	
+	<!-- 修改一条记录 -->
+	<update id="updateSection" parameterType="Section">
+		UPDATE section SET sectionName = #{sectionName},sectionRemarks = #{sectionRemarks},topicCount = #{topicCount},userId = #{user.userId},status = #{status} WHERE sectionId = #{sectionId}
+	</update>
+	
+	<!-- 删除一条记录 -->
+	<delete id="deleteSection" parameterType="int">
+		DELETE FROM section WHERE sectionId = #{id}
+	</delete>
+	
+	
+	<resultMap type="Section" id="SectionResultMap">
+		<id property="sectionId" column="sectionId"/>
+		<result property="sectionName" column="sectionName"/>
+		<result property="sectionRemarks" column="sectionRemarks" />
+		<result property="topicCount" column="topicCount" />
+		<result property="status" column="status" />
+		<association property="user" column="userId" javaType="Users" select="getUsers"></association>
+		<collection property="topicList" column="sectionId" ofType="Topic" select="getTopic"></collection>
+	</resultMap>
+	
+	<select id="getUsers" parameterType="int" resultType="Users">
+		SELECT * FROM users WHERE userId=#{id} AND status != 0
+	</select>
+	
+	<select id="getTopic" parameterType="int" resultType="Topic">
+		SELECT * FROM topic WHERE sectionId=#{id} AND status != 0
+	</select>
+	
+</mapper>

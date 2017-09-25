@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.dao.TopicDao">
+	<!-- id：标识；parameterType：接收的参数类型，resultType：返回值类型 -->
+	
+	<!-- 根据ID查询单条记录 -->
+	<select id="getTopic" parameterType="int" resultMap="TopicResultMap">
+		SELECT * FROM topic WHERE topicId = #{id} AND status != 0
+	</select>
+	
+	<!-- 查询所有记录 -->
+	<select id="findAll" parameterType="int" resultMap="TopicResultMap">
+		SELECT * FROM topic WHERE status != 0 AND sectionId = #{sectionId}
+	</select>
+	
+	<!-- 根据关键字搜索 -->
+	<select id="search" parameterType="Topic" resultMap="TopicResultMap">
+		SELECT * FROM topic WHERE status != 0 AND sectionId = #{section.sectionId} AND (topicTitle LIKE CONCAT('%',#{key},'%') || userId IN(SELECT userId FROM users WHERE status != 0 AND userName LIKE CONCAT('%',#{key},'%')))
+	</select>
+	
+	<!-- 插入一条记录,keyProperty是Java对象的属性名,执行完插入语句后，自动将自增主键赋给对象的指定属性 -->
+	<insert id="saveTopic" parameterType="Topic" useGeneratedKeys="true" keyProperty="topicId">
+		INSERT INTO topic(topicTitle,topicContent,replyCount,sectionId,userId,post_time,status) VALUES(#{topicTitle},#{topicContent},#{replyCount},#{section.sectionId},#{user.userId},#{post_time},#{status})
+	</insert>
+	
+	<!-- 修改一条记录 -->
+	<update id="updateTopic" parameterType="Topic">
+		UPDATE topic SET topicTitle = #{topicTitle},topicContent = #{topicContent},replyCount = #{replyCount},sectionId = #{section.sectionId},userId = #{user.userId},post_time = #{post_time},status = #{status} WHERE topicId = #{topicId}
+	</update>
+	
+	<!-- 删除一条记录 -->
+	<delete id="deleteTopic" parameterType="int">
+		DELETE FROM topic WHERE topicId = #{id}
+	</delete>
+	
+	
+	<resultMap type="Topic" id="TopicResultMap">
+		<id property="topicId" column="topicId"/>
+		<result property="topicTitle" column="topicTitle"/>
+		<result property="topicContent" column="topicContent" />
+		<result property="replyCount" column="replyCount" />
+		<result property="post_time" column="post_time" />
+		<result property="status" column="status" />
+		<association property="user" column="userId" javaType="Users" select="getUsers"></association>
+		<association property="section" column="sectionId" javaType="Section" select="getSection"></association>
+		<collection property="replyList" column="topicId" ofType="Reply" select="getReply"></collection>
+	</resultMap>
+	
+	<select id="getUsers" parameterType="int" resultType="Users">
+		SELECT * FROM users WHERE userId=#{id} AND status != 0
+	</select>
+	
+	<select id="getSection" parameterType="int" resultType="Section">
+		SELECT * FROM section WHERE sectionId=#{id} AND status != 0
+	</select>
+	
+	<select id="getReply" parameterType="int" resultType="Reply">
+		SELECT * FROM reply WHERE topicId=#{id} AND status != 0
+	</select>
+		
+</mapper>

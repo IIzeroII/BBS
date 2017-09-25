@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的 -->
+<mapper namespace="com.bbs.dao.UsersDao">
+	<!-- id：标识；parameterType：接收的参数类型，resultType：返回值类型 -->
+	
+	<!-- 根据ID查询单条记录 -->
+	<select id="getUserById" parameterType="int" resultMap="UsersResultMap">
+		SELECT * FROM users WHERE userId = #{id} AND status != 0
+	</select>
+	
+	<!-- 根据Name查询单条记录 -->
+	<select id="getUserByName" parameterType="string" resultMap="UsersResultMap">
+		SELECT * FROM users WHERE userName = #{name} AND status != 0
+	</select>
+	
+	<!-- 查询所有记录 -->
+	<select id="findAll" resultMap="UsersResultMap">
+		SELECT * FROM users WHERE status NOT IN (0,1) 
+	</select>
+	
+	<!-- 根据关键字搜索 -->
+	<select id="search" parameterType="string" resultMap="UsersResultMap">
+		SELECT * FROM users WHERE status NOT IN (0,1) AND (userName LIKE CONCAT('%',#{key},'%') || status = #{key})
+	</select>
+	
+	<!-- 查询所有高权限用户 -->
+	<select id="findHighPower" resultMap="UsersResultMap">
+		SELECT * FROM users WHERE status IN(1,2)
+	</select>
+	
+	<!-- 插入一条记录,keyProperty是Java对象的属性名,执行完插入语句后，自动将自增主键赋给对象的指定属性 -->
+	<insert id="saveUser" parameterType="Users" useGeneratedKeys="true" keyProperty="userId">
+		INSERT INTO users(userName,userPassword,status) VALUES(#{userName},#{userPassword},#{status})
+	</insert>
+	
+	<!-- 修改一条记录 -->
+	<update id="updateUser" parameterType="Users">
+		UPDATE users SET userName = #{userName},userPassword = #{userPassword},status = #{status} WHERE userId = #{userId}
+	</update>
+	
+	<!-- 删除一条记录 -->
+	<delete id="deleteUser" parameterType="int">
+		DELETE FROM users WHERE userId = #{id}
+	</delete>
+	
+	
+	<resultMap type="Users" id="UsersResultMap">
+		<id property="userId" column="userId"/>
+		<result property="userName" column="userName"/>
+		<result property="userPassword" column="userPassword" />
+		<result property="status" column="status" />
+		<collection property="sectionList" column="userId" ofType="Section" select="getSection"></collection>
+		<collection property="topicList" column="userId" ofType="Topic" select="getTopic"></collection>
+		<collection property="replyList" column="userId" ofType="Reply" select="getReply"></collection>
+	</resultMap>
+	
+	<select id="getSection" parameterType="int" resultType="Section">
+		SELECT * FROM section WHERE userId=#{id} AND status != 0
+	</select>
+	
+	<select id="getTopic" parameterType="int" resultType="Topic">
+		SELECT * FROM topic WHERE userId=#{id} AND status != 0
+	</select>
+	
+	<select id="getReply" parameterType="int" resultType="Reply">
+		SELECT * FROM reply WHERE userId=#{id} AND status != 0
+	</select>
+	
+</mapper>
